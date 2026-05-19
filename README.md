@@ -190,8 +190,18 @@ FlipperForce settings suggests their backend decrypts server-side; until we
 have docs, the probe is the cleanest way to discover the right wire format.
 
 ### REsimpli
-* API access typically requires contacting REsimpli support.
-* Set `RESIMPLI_API_KEY`, `RESIMPLI_API_BASE`, and implement `fetchLive()`.
+REsimpli does not publish a public API spec. Same pattern as FlipperForce:
+1. Set `RESIMPLI_API_KEY` in `.env`.
+2. Start the app and visit <http://localhost:3000/api/resimpli/probe>. It
+   tries four auth header styles + query-string mode against four base URLs
+   × five common paths and reports which combination returns 200.
+3. Lock in `RESIMPLI_API_BASE`, `RESIMPLI_LEADS_PATH`, and
+   `RESIMPLI_AUTH_MODE` from the probe results.
+
+`fetchLive()` maps the leads array into weekly/monthly funnel counts
+(new / qualified / appt / offer / contract) by date-bucketing leads on
+`createdAt` / `updatedAt`. Lead-source ROI and marketing spend stay as mock
+until the marketing endpoint shape is confirmed.
 
 ---
 

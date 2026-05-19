@@ -435,6 +435,15 @@ app.get('/api/flipperforce/probe', async (_req, res) => {
   }
 });
 
+// REsimpli auth-mode probe (one-time discovery)
+app.get('/api/resimpli/probe', async (_req, res) => {
+  try {
+    res.json({ results: await resimpli.probe() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // V2 placeholder endpoints
 app.get('/api/v2/flip-timer', async (_req, res) => {
   res.json(await flipTimer.getFlipTimerState());
