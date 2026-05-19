@@ -1,0 +1,89 @@
+{
+  "asOf": "2026-05-19",
+  "cashOnHand": 612480.55,
+  "bankBalances": [
+    { "account": "Chase Operating", "balance": 184220.12 },
+    { "account": "Chase Reserves", "balance": 325000.00 },
+    { "account": "BofA Project Escrow", "balance": 78260.43 },
+    { "account": "Stripe / Sweep", "balance": 25000.00 }
+  ],
+  "monthlyIncome": 482300.00,
+  "monthlyExpenses": 391450.00,
+  "monthlyBurnRate": 58420.00,
+  "apOutstanding": 84210.55,
+  "apAging": {
+    "current": 31200.00,
+    "1to30": 28100.00,
+    "31to60": 17500.00,
+    "61to90": 5210.55,
+    "over90": 2200.00
+  },
+  "interestPaymentsDueThisMonth": 22150.00,
+  "upcomingInvestorDraws": [
+    { "investor": "Caldwell Capital", "amount": 75000, "dueDate": "2026-05-25" },
+    { "investor": "Northstar Lending", "amount": 42000, "dueDate": "2026-06-02" }
+  ],
+  "classExpenses": [
+    {
+      "class": "PROP-001",
+      "rehabSpend": 41250.00,
+      "holdingCosts": 6200.00,
+      "interestPayments": 3400.00,
+      "totalSpend": 50850.00
+    },
+    {
+      "class": "PROP-002",
+      "rehabSpend": 78400.00,
+      "holdingCosts": 9100.00,
+      "interestPayments": 4800.00,
+      "totalSpend": 92300.00
+    },
+    {
+      "class": "PROP-003",
+      "rehabSpend": 12200.00,
+      "holdingCosts": 2100.00,
+      "interestPayments": 1100.00,
+      "totalSpend": 15400.00
+    },
+    {
+      "class": "PROP-004",
+      "rehabSpend": 95300.00,
+      "holdingCosts": 14200.00,
+      "interestPayments": 6900.00,
+      "totalSpend": 116400.00
+    },
+    {
+      "class": "PROP-005",
+      "rehabSpend": 32800.00,
+      "holdingCosts": 4100.00,
+      "interestPayments": 2150.00,
+      "totalSpend": 39050.00
+    },
+    {
+      "class": "PROP-006",
+      "rehabSpend": 5600.00,
+      "holdingCosts": 800.00,
+      "interestPayments": 450.00,
+      "totalSpend": 6850.00
+    },
+    {
+      "class": "PROP-007",
+      "rehabSpend": 64200.00,
+      "holdingCosts": 7800.00,
+      "interestPayments": 3950.00,
+      "totalSpend": 75950.00
+    },
+    {
+      "class": "PROP-008",
+      "rehabSpend": 18900.00,
+      "holdingCosts": 2500.00,
+      "interestPayments": 1300.00,
+      "totalSpend": 22700.00
+    }
+  ],
+  "soldPropertiesNetProfit": [
+    { "class": "PROP-S01", "address": "812 Magnolia Ave", "netProfit": 38600 },
+    { "class": "PROP-S02", "address": "447 Birch St", "netProfit": 51200 },
+    { "class": "PROP-S03", "address": "1209 Oakridge Ct", "netProfit": 29400 }
+  ]
+}

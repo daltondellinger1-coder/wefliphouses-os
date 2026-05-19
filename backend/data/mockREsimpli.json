@@ -1,0 +1,122 @@
+{
+  "asOf": "2026-05-19",
+  "weekly": {
+    "newLeads": 47,
+    "qualifiedLeads": 18,
+    "appointments": 11,
+    "offersMade": 6,
+    "contractsSigned": 2
+  },
+  "monthly": {
+    "newLeads": 182,
+    "qualifiedLeads": 71,
+    "appointments": 39,
+    "offersMade": 23,
+    "contractsSigned": 4
+  },
+  "marketingSpendMonthly": 28400,
+  "leadSources": [
+    {
+      "source": "Direct Mail",
+      "newLeads": 64,
+      "qualifiedLeads": 22,
+      "contracts": 2,
+      "spend": 14200,
+      "costPerLead": 221.88,
+      "costPerContract": 7100.00
+    },
+    {
+      "source": "PPC (Google)",
+      "newLeads": 41,
+      "qualifiedLeads": 19,
+      "contracts": 1,
+      "spend": 8600,
+      "costPerLead": 209.76,
+      "costPerContract": 8600.00
+    },
+    {
+      "source": "Cold Calling",
+      "newLeads": 38,
+      "qualifiedLeads": 15,
+      "contracts": 1,
+      "spend": 3200,
+      "costPerLead": 84.21,
+      "costPerContract": 3200.00
+    },
+    {
+      "source": "SEO / Organic",
+      "newLeads": 22,
+      "qualifiedLeads": 9,
+      "contracts": 0,
+      "spend": 1600,
+      "costPerLead": 72.73,
+      "costPerContract": null
+    },
+    {
+      "source": "Referral",
+      "newLeads": 17,
+      "qualifiedLeads": 6,
+      "contracts": 0,
+      "spend": 800,
+      "costPerLead": 47.06,
+      "costPerContract": null
+    }
+  ],
+  "pipeline": [
+    {
+      "leadId": "L-10241",
+      "address": "1908 Birch Hollow Rd",
+      "city": "Charlotte, NC",
+      "source": "Direct Mail",
+      "stage": "Offer Sent",
+      "assignedTo": "Jordan Reyes",
+      "offerAmount": 152000,
+      "createdAt": "2026-05-10",
+      "lastTouch": "2026-05-17"
+    },
+    {
+      "leadId": "L-10247",
+      "address": "612 Glenwood Ave",
+      "city": "Greensboro, NC",
+      "source": "PPC (Google)",
+      "stage": "Appointment Set",
+      "assignedTo": "Jordan Reyes",
+      "offerAmount": null,
+      "createdAt": "2026-05-13",
+      "lastTouch": "2026-05-18"
+    },
+    {
+      "leadId": "L-10250",
+      "address": "284 Hillcrest Ter",
+      "city": "Raleigh, NC",
+      "source": "Cold Calling",
+      "stage": "Qualifying",
+      "assignedTo": "Priya Patel",
+      "offerAmount": null,
+      "createdAt": "2026-05-15",
+      "lastTouch": "2026-05-18"
+    },
+    {
+      "leadId": "L-10258",
+      "address": "77 Sunset Park",
+      "city": "Charlotte, NC",
+      "source": "Direct Mail",
+      "stage": "Under Contract",
+      "assignedTo": "Jordan Reyes",
+      "offerAmount": 148000,
+      "createdAt": "2026-05-02",
+      "lastTouch": "2026-05-15"
+    },
+    {
+      "leadId": "L-10262",
+      "address": "1410 Willow Springs",
+      "city": "Durham, NC",
+      "source": "Referral",
+      "stage": "Offer Sent",
+      "assignedTo": "Priya Patel",
+      "offerAmount": 188000,
+      "createdAt": "2026-05-14",
+      "lastTouch": "2026-05-18"
+    }
+  ]
+}

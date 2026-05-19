@@ -1,0 +1,17 @@
+{
+  "name": "wefliphouses-os",
+  "version": "1.0.0",
+  "description": "We Flip Houses executive dashboard - real estate investing OS for scaling to 36 flips/year",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
