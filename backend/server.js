@@ -388,6 +388,53 @@ app.get('/api/dashboard', async (_req, res) => {
   res.json(payload);
 });
 
+// ---------------------------------------------------------------------------
+// QuickBooks OAuth handshake (one-time setup)
+// ---------------------------------------------------------------------------
+
+const QBO_STATE = `wfh-${Math.random().toString(36).slice(2)}`;
+
+app.get('/api/qbo/status', async (_req, res) => {
+  res.json(await quickbooks.connectionStatus());
+});
+
+app.get('/api/qbo/connect', (_req, res) => {
+  if (!process.env.QBO_CLIENT_ID || !process.env.QBO_REDIRECT_URI) {
+    return res
+      .status(500)
+      .send('QBO_CLIENT_ID and QBO_REDIRECT_URI must be set in .env');
+  }
+  res.redirect(quickbooks.buildAuthorizeUrl(QBO_STATE));
+});
+
+app.get('/api/qbo/callback', async (req, res) => {
+  const { code, state, realmId } = req.query;
+  if (state !== QBO_STATE) {
+    return res.status(400).send('State mismatch. Restart the connect flow.');
+  }
+  try {
+    await quickbooks.exchangeCodeForTokens(code);
+    res.send(
+      `<h1>QuickBooks connected.</h1>` +
+        `<p>Realm ID returned: <code>${realmId || '(none)'}</code></p>` +
+        `<p>You can close this tab. The dashboard will now use live QBO data on the next refresh.</p>` +
+        `<p><a href="/">Back to dashboard</a></p>`,
+    );
+  } catch (err) {
+    console.error('[qbo] callback failed:', err.message);
+    res.status(500).send(`<h1>QBO connect failed</h1><pre>${err.message}</pre>`);
+  }
+});
+
+// FlipperForce auth-mode probe (one-time discovery)
+app.get('/api/flipperforce/probe', async (_req, res) => {
+  try {
+    res.json({ results: await flipperforce.probe() });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // V2 placeholder endpoints
 app.get('/api/v2/flip-timer', async (_req, res) => {
   res.json(await flipTimer.getFlipTimerState());

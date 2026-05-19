@@ -6,3 +6,4 @@ npm-debug.log*
 *.log
 .vscode/
 .idea/
+backend/data/qbo_tokens.json

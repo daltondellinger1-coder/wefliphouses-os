@@ -144,24 +144,50 @@ Set `DATA_MODE=live` in `.env`, then fill in credentials and implement the
 `fetchLive()` function in each service.
 
 ### QuickBooks Online
-* OAuth 2.0: <https://developer.intuit.com/app/developer/qbo/docs/get-started>
-* Reports needed:
-  * `BalanceSheet` — cash on hand / bank balances
-  * `ProfitAndLoss` — monthly income/expenses/burn
-  * `AgedPayables` — AP aging buckets
-  * `ProfitAndLossDetail?classid=…` — rehab + holding + interest per property
-* **Required convention:** create one QBO **Class** per flip whose name
-  exactly matches the FlipperForce **projectId**.
+Implemented. Live mode pulls four reports in parallel and maps them into
+the same shape as `mockQuickBooks.json` so the rest of the app is unchanged.
+
+**One-time connect flow:**
+1. In the Intuit developer dashboard, set the app's Redirect URI to exactly
+   `http://localhost:3000/api/qbo/callback` (or whatever you set
+   `QBO_REDIRECT_URI` to).
+2. Fill in `QBO_CLIENT_ID`, `QBO_CLIENT_SECRET`, `QBO_REALM_ID`,
+   `QBO_ENVIRONMENT` in `.env`. Set `DATA_MODE=live`.
+3. `npm start`, then visit <http://localhost:3000/api/qbo/connect> and
+   authorize the WFH company.
+4. Tokens are persisted to `backend/data/qbo_tokens.json` (gitignored) and
+   auto-refresh. The dashboard's QBO source pill flips to `live` on next
+   refresh. `GET /api/qbo/status` shows current connection state.
+
+**Reports used:**
+* `BalanceSheet` — cash on hand, bank balances
+* `ProfitAndLoss` (this month-to-date) — monthly income, expenses, burn
+* `ProfitAndLoss` (summarize_column_by=Class) — per-property class expenses
+* `AgedPayables` — AP outstanding + aging buckets
+
+**Required convention:** create one QBO **Class** per flip whose name
+exactly matches the FlipperForce **projectId**. The class-summary report
+columns are matched to projects on this join.
 
 ### FlipperForce
-FlipperForce does not publish a public REST API as of 2026-05. Options:
-1. **CSV drop:** export Projects to CSV, place at
-   `backend/data/flipperforce_export.csv`, and extend `flipperforceService`
-   to parse it.
-2. **Webhook ingest:** push project updates from FlipperForce via Zapier or
-   Make into a local store this service reads.
-3. **Partner API:** if you obtain credentials, set `FLIPPERFORCE_API_BASE`
-   and `FLIPPERFORCE_API_KEY` and implement `fetchLive()`.
+FlipperForce does not publish a public REST API as of 2026-05. Three paths:
+1. **CSV drop (zero-config):** export Projects to CSV, place at
+   `backend/data/flipperforce_export.csv`. The service auto-detects it and
+   parses headers like `projectId`, `address`, `Budgeted Rehab`, etc. (see
+   `csvRowToProject` in `flipperforceService.js` for the full mapping).
+2. **Partner / private API:** set `FLIPPERFORCE_API_BASE` and
+   `FLIPPERFORCE_API_KEY`, then start the app and visit
+   <http://localhost:3000/api/flipperforce/probe>. It will try five auth
+   header styles (`Bearer`, `X-API-Key`, `Api-Token`, `Token`, cookie) +
+   query-string mode against five common paths, and report which (if any)
+   returns 200. Set `FLIPPERFORCE_AUTH_MODE` and `FLIPPERFORCE_PROJECTS_PATH`
+   accordingly.
+3. **Webhook ingest:** push project updates from FlipperForce via Zapier or
+   Make into a local file/store and have `flipperforceService` read from it.
+
+The Laravel-encrypted (`Crypt::encryptString`) format of the key in
+FlipperForce settings suggests their backend decrypts server-side; until we
+have docs, the probe is the cleanest way to discover the right wire format.
 
 ### REsimpli
 * API access typically requires contacting REsimpli support.
