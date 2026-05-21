@@ -74,6 +74,8 @@ async function probe() {
   if (!key) return [{ note: 'FLIPPERFORCE_API_KEY not set' }];
 
   const paths = [
+    '/api/v1/project/list',
+    '/api/v1/user/account',
     '/api/v1/projects',
     '/api/projects',
     '/api/v1/deals',
@@ -144,6 +146,83 @@ function csvRowToProject(row) {
 }
 
 // ---------------------------------------------------------------------------
+// Map FlipperForce Project shape -> dashboard project shape
+//
+// The public /project/list endpoint only exposes project metadata + workflow
+// stage. Financial/operational fields (budgets, dates, PMs, blockers, %
+// complete) are not in the public API — those stay null and the UI shows "—".
+// ---------------------------------------------------------------------------
+
+const FF_STAGE_LABELS = {
+  lead: 'New Lead',
+  contacting_seller: 'Contacting Seller',
+  appointment_set: 'Appointment Set',
+  offer_made: 'Offer Made',
+  negotiation: 'Negotiating',
+  pending_purchase: 'Pending Purchase',
+  construction_on_hold: 'Construction On-Hold',
+  planning_permitting: 'Planning/Permitting',
+  under_construction: 'Under Construction',
+  punch_list: 'Punch List',
+  active_listing: 'Active Listing',
+  pending_sale: 'Pending Sale',
+  completed_portfolio: 'Completed/Sold',
+  rental_inventory: 'Rental Inventory',
+  wholesale_inventory: 'Wholesale Inventory',
+};
+
+const FF_STAGE_BUCKETS = {
+  lead: 'Acquisition',
+  contacting_seller: 'Acquisition',
+  appointment_set: 'Acquisition',
+  offer_made: 'Acquisition',
+  negotiation: 'Acquisition',
+  pending_purchase: 'Acquisition',
+  construction_on_hold: 'Rehab',
+  planning_permitting: 'Rehab',
+  under_construction: 'Rehab',
+  punch_list: 'Rehab',
+  active_listing: 'Listed',
+  pending_sale: 'Listed',
+  completed_portfolio: 'Sold',
+  rental_inventory: 'Inventory',
+  wholesale_inventory: 'Inventory',
+};
+
+function mapFFProject(p) {
+  const stage = p.stage || null;
+  // projectId is the join key with QBO Class name. We use the human-readable
+  // FF project name so operators can label QBO classes with the same string.
+  const projectId = p.name || p.uuid;
+  const cityState =
+    p.city && p.state ? `${p.city}, ${p.state}` : p.city || p.state || null;
+  return {
+    projectId,
+    address:
+      p.address_1 ||
+      (p.full_address ? p.full_address.split(',')[0] : null),
+    city: cityState,
+    status: stage ? FF_STAGE_BUCKETS[stage] || stage : null,
+    phase: stage ? FF_STAGE_LABELS[stage] || stage : null,
+    purchaseDate: null,
+    rehabStartDate: null,
+    targetCompletionDate: null,
+    listDate: null,
+    saleDate: null,
+    budgetedRehab: null,
+    actualRehabSpend: null,
+    percentComplete: null,
+    lastProjectUpdate: p.updated_at ? p.updated_at.slice(0, 10) : null,
+    projectManager: null,
+    nextAction: null,
+    blockers: null,
+    arv: null,
+    purchasePrice: null,
+    tasks: [],
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Live fetch
 // ---------------------------------------------------------------------------
 
@@ -160,19 +239,36 @@ async function fetchLive() {
   const base = process.env.FLIPPERFORCE_API_BASE;
   const key = process.env.FLIPPERFORCE_API_KEY;
   const mode = process.env.FLIPPERFORCE_AUTH_MODE || 'bearer';
-  const projectsPath = process.env.FLIPPERFORCE_PROJECTS_PATH || '/api/v1/projects';
+  const projectsPath =
+    process.env.FLIPPERFORCE_PROJECTS_PATH || '/api/v1/project/list';
   if (!base || !key) throw new Error('FlipperForce base URL or API key missing');
 
   const url = base.replace(/\/+$/, '') + projectsPath;
-  const r = await tryFetch(url, authHeaders(mode, key));
-  if (!r.ok) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 15000);
+  let res;
+  try {
+    res = await fetch(url, {
+      headers: { Accept: 'application/json', ...authHeaders(mode, key) },
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!res.ok) {
+    const text = (await res.text()).slice(0, 200);
     throw new Error(
-      `FlipperForce ${r.status}: ${r.bodyPreview} (try /api/flipperforce/probe to find the right auth mode)`,
+      `FlipperForce ${res.status}: ${text} (try /api/flipperforce/probe to find the right auth mode)`,
     );
   }
-  const data = JSON.parse(r.bodyPreview);
-  // TODO once we confirm response shape, map to { asOf, projects: [...] }
-  return { asOf: new Date().toISOString().slice(0, 10), projects: data.projects || data };
+  const body = await res.json();
+  const list = Array.isArray(body)
+    ? body
+    : Array.isArray(body?.data)
+      ? body.data
+      : [];
+  const projects = list.map(mapFFProject);
+  return { asOf: new Date().toISOString().slice(0, 10), projects };
 }
 
 async function getProjects() {
