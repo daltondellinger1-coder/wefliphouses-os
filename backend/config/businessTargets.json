@@ -1,0 +1,20 @@
+{
+  "annualFlipTarget": 36,
+  "weeklyOfferTarget": 5,
+  "monthlyContractTarget": 3,
+  "weeklyLeadTarget": 25,
+  "targetAverageNetProfitPerFlip": 40000,
+  "assignmentFeeTargetPerDeal": 10000,
+  "monthlyOverhead": 60000,
+  "minimumCashReserveWarning": 500000,
+  "redAlertNoUpdateDays": 3,
+  "yellowAlertNoUpdateDays": 2,
+  "targetAverageRehabDurationDays": 75,
+  "overBudgetRedPct": 10,
+  "overBudgetYellowPct": 5,
+  "maxDaysOwnedBeforeAlert": 180,
+  "company": {
+    "name": "We Flip Houses",
+    "tagline": "Executive Operating Cockpit"
+  }
+}

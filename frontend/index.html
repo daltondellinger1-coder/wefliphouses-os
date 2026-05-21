@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>We Flip Houses — Executive Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-name" id="brandName">We Flip Houses</div>
+        <div class="brand-tagline" id="brandTagline">Executive Operating Cockpit</div>
+      </div>
+      <div class="topbar-meta">
+        <div class="data-mode">
+          Data mode: <span id="dataMode">—</span>
+        </div>
+        <div class="last-updated">
+          Updated <span id="lastUpdated">—</span>
+        </div>
+        <button id="refreshBtn" class="btn-primary" type="button">
+          Refresh Now
+        </button>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="summary">Summary</button>
+      <button class="tab" data-tab="acquisitions">Acquisitions</button>
+      <button class="tab" data-tab="projects">Projects</button>
+      <button class="tab" data-tab="inventory">Inventory</button>
+      <button class="tab" data-tab="cash">Cash</button>
+      <button class="tab" data-tab="profit">Profit</button>
+      <button class="tab" data-tab="alerts">Alerts</button>
+      <button class="tab tab-v2" data-tab="fliptimer" title="V2">Flip Timer (V2)</button>
+      <button class="tab tab-v2" data-tab="homestead" title="V2">Homestead Hill (V2)</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </nav>
+
+    <main>
+      <!-- A. Executive Summary -->
+      <section id="tab-summary" class="tab-panel active">
+        <h2>Executive Summary</h2>
+        <div class="cards" id="summaryCards"></div>
+
+        <h3>This Morning's 5 Questions</h3>
+        <div class="five-questions" id="fiveQuestions"></div>
+      </section>
+
+      <!-- B. Acquisitions Scoreboard -->
+      <section id="tab-acquisitions" class="tab-panel">
+        <h2>Acquisitions Scoreboard</h2>
+        <div class="funnel-grid">
+          <div>
+            <h3>This Week</h3>
+            <table class="funnel-table" id="weeklyFunnel"></table>
+          </div>
+          <div>
+            <h3>This Month</h3>
+            <table class="funnel-table" id="monthlyFunnel"></table>
+          </div>
+        </div>
+
+        <h3>Key Ratios</h3>
+        <div class="cards" id="acqRatios"></div>
+
+        <h3>Lead Source ROI</h3>
+        <div class="scroll-x">
+          <table class="data-table" id="leadSources"></table>
+        </div>
+
+        <h3>Pipeline</h3>
+        <div class="scroll-x">
+          <table class="data-table" id="pipeline"></table>
+        </div>
+      </section>
+
+      <!-- C. Active Projects Board -->
+      <section id="tab-projects" class="tab-panel">
+        <h2>Active Projects</h2>
+        <div class="scroll-x">
+          <table class="data-table" id="projectsTable"></table>
+        </div>
+      </section>
+
+      <!-- D. Inventory Aging -->
+      <section id="tab-inventory" class="tab-panel">
+        <h2>Inventory Aging</h2>
+        <div class="scroll-x">
+          <table class="data-table" id="inventoryTable"></table>
+        </div>
+      </section>
+
+      <!-- E. Cash & Carrying Cost -->
+      <section id="tab-cash" class="tab-panel">
+        <h2>Cash &amp; Carrying Cost</h2>
+        <div class="cards" id="cashCards"></div>
+
+        <h3>Upcoming Investor Draws</h3>
+        <div class="scroll-x">
+          <table class="data-table" id="drawsTable"></table>
+        </div>
+
+        <h3>Highest Carrying-Cost Properties</h3>
+        <div class="scroll-x">
+          <table class="data-table" id="carryingTable"></table>
+        </div>
+
+        <h3>Cash Forecast</h3>
+        <div class="scroll-x">
+          <table class="data-table" id="forecastTable"></table>
+        </div>
+      </section>
+
+      <!-- F. Profit Forecast -->
+      <section id="tab-profit" class="tab-panel">
+        <h2>Profit Forecast</h2>
+        <div class="cards" id="profitCards"></div>
+        <h3>By Project</h3>
+        <div class="scroll-x">
+          <table class="data-table" id="profitTable"></table>
+        </div>
+      </section>
+
+      <!-- G. Alerts -->
+      <section id="tab-alerts" class="tab-panel">
+        <h2>Alerts &amp; Exceptions</h2>
+        <div id="alertsList"></div>
+      </section>
+
+      <!-- V2 placeholders -->
+      <section id="tab-fliptimer" class="tab-panel">
+        <h2>Flip Timer (V2)</h2>
+        <div class="v2-placeholder" id="flipTimerPlaceholder"></div>
+      </section>
+
+      <section id="tab-homestead" class="tab-panel">
+        <h2>Homestead Hill Tracker (V2)</h2>
+        <div class="v2-placeholder" id="homesteadPlaceholder"></div>
+      </section>
+
+      <!-- Settings -->
+      <section id="tab-settings" class="tab-panel">
+        <h2>Business Targets</h2>
+        <p class="muted">
+          Editing these values updates <code>backend/config/businessTargets.json</code>
+          and the next dashboard refresh will use the new thresholds.
+        </p>
+        <form id="targetsForm" class="targets-form"></form>
+        <button id="saveTargetsBtn" class="btn-primary" type="button">
+          Save Targets
+        </button>
+        <div id="settingsStatus" class="muted"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span id="footerNote"></span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
